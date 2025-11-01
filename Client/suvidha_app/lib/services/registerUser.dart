@@ -17,7 +17,7 @@ class AuthResponse {
 
 class AuthService {
   // Base URL - update this with your server URL
-  static const String baseUrl = 'http://localhost:5000/api/auth';
+  static const String baseUrl = 'https://suvidha-5w0x.onrender.com/api/auth';
   
   // For Android emulator, use: 'http://10.0.2.2:5000/api/auth'
   // For iOS simulator, use: 'http://localhost:5000/api/auth'
