@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/auth/singnUp.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
       ),
-      home: const SignUpScreen(),
+      home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

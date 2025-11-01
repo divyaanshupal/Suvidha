@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:suvidha_app/services/registerUser.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -48,7 +49,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isSubmitting = true;
     });
-    await Future<void>.delayed(const Duration(milliseconds: 800));
+    //await Future<void>.delayed(const Duration(milliseconds: 800));
+
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final response = await AuthService.registerUser(email, password);
+    if (response.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Signed up successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message ?? 'Registration failed')),
+      );
+    }
     if (!mounted) return;
     setState(() {
       _isSubmitting = false;
