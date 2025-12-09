@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:suvidha_app/features/HomeScreen/homeScreen.dart';
+import 'package:suvidha_app/features/auth/login.dart';
 import 'package:suvidha_app/services/registerUser.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -80,6 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
       if (!mounted) return;
 
       if (response.success) {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => Homescreen()));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -539,7 +542,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                                 GestureDetector(
                                   onTap: () {
                                     // Navigate to login screen
-                                    // Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                                     Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
                                   },
                                   child: const Text(
                                     'Sign In',

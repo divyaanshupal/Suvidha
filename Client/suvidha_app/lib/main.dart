@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:suvidha_app/features/auth/login.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
       ),
-      home: const SplashScreen(),
+      home: const LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
