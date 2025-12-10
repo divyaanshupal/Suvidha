@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,583 +13,565 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   int _currentIndex = 0;
 
+  // Modern vibrant palette
+  final Color kPrimaryColor = const Color(0xFF4F46E5); // Indigo
+  final Color kSecondaryColor = const Color(0xFF0EA5E9); // Sky Blue
+  final Color kBgColor = const Color(0xFFF8FAFC); // Very light slate
+  final Color kDarkText = const Color(0xFF0F172A);
+
   final List<String> _carouselImages = [
     'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800',
-    'https://images.unsplash.com/photo-1557683316-973673baf926?w=800',
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800', // Changed for variety
     'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F5FA),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 90.h),
+      backgroundColor: kBgColor,
+      extendBody: true, // Allows content behind bottom nav/buttons
+      body: Stack(
+        children: [
+          // 1. Dynamic Background Header
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 320.h,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [kPrimaryColor, kSecondaryColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.r),
+                  bottomRight: Radius.circular(40.r),
+                ),
+              ),
+            ),
+          ),
+          
+          // 2. Decorative Circles for "Vibe"
+          Positioned(
+            top: -50,
+            right: -50,
+            child: CircleAvatar(
+              radius: 100.r,
+              backgroundColor: Colors.white.withOpacity(0.1),
+            ),
+          ),
+          Positioned(
+            top: 80,
+            left: -40,
+            child: CircleAvatar(
+              radius: 60.r,
+              backgroundColor: Colors.white.withOpacity(0.1),
+            ),
+          ),
+
+          // 3. Main Scrollable Content
+          SafeArea(
+            bottom: false,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 100.h),
+              //physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ************** HEADER **************
-                  Container(
-                    height: 200.h,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF1A73E8), Color(0xFF1554C5)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20.w,
-                        vertical: 14.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Suvidha",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 26.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              CircleAvatar(
-                                radius: 18.r,
-                                backgroundColor:
-                                    Colors.white.withOpacity(0.12),
-                                child: const Icon(
-                                  Icons.notifications_none_rounded,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            "Register issues with your city\nand track them in real time.",
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          SizedBox(height: 18.h),
-
-                          // GLASS SEARCH BAR
-                          _glassBox(
-                            child: Row(
-                              children: [
-                                Icon(Icons.search,
-                                    color: Colors.white70, size: 20.sp),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  "Search complaints, IDs...",
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 13.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 18.h),
-
-                  // *********** CAROUSEL ***********
+                  // HEADER SECTION
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: 180.h,
-                        autoPlay: true,
-                        viewportFraction: 0.9,
-                        enlargeCenterPage: true,
-                        autoPlayInterval: const Duration(seconds: 4),
-                        autoPlayAnimationDuration:
-                            const Duration(milliseconds: 900),
-                        onPageChanged: (index, reason) {
-                          setState(() => _currentIndex = index);
-                        },
-                      ),
-                      items: _carouselImages.map((img) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(18.r),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Image.network(img, fit: BoxFit.cover),
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.black.withOpacity(0.1),
-                                      Colors.black.withOpacity(0.5),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(14.w),
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    "Raise issues in 2 taps\nand let us handle the rest.",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                    child: _buildHeader(),
                   ),
 
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 20.h),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _carouselImages.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        margin: EdgeInsets.symmetric(horizontal: 4.w),
-                        width: _currentIndex == index ? 14.w : 8.w,
-                        height: 8.h,
-                        decoration: BoxDecoration(
-                          color: _currentIndex == index
-                              ? const Color(0xFF1A73E8)
-                              : Colors.grey.shade400,
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 22.h),
-
-                  // *********** QUICK ACTIONS ***********
+                  // STATS / QUICK INFO CARDS
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Text(
-                      "Quick actions",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1A1D2A),
-                      ),
-                    ),
+                    child: _buildQuickStats(),
                   ),
 
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 25.h),
+
+                  // SECTION TITLE: SERVICES
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _actionButton(
-                          icon: Icons.add_circle_outline_rounded,
-                          text: "New complaint",
-                          color: const Color(0xFF1A73E8),
-                        ),
-                        _actionButton(
-                          icon: Icons.track_changes_rounded,
-                          text: "Track status",
-                          color: const Color(0xFFF79009),
-                        ),
-                        _actionButton(
-                          icon: Icons.history_rounded,
-                          text: "History",
-                          color: const Color(0xFF16A34A),
-                        ),
-                      ],
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    // child: Text(
+                    //   "Services",
+                    //   style: TextStyle(
+                    //     fontSize: 18.sp,
+                    //     fontWeight: FontWeight.bold,
+                    //     color: kDarkText,
+                    //     letterSpacing: 0.5,
+                    //   ),
+                    // ),
                   ),
+                  SizedBox(height: 15.h),
+                  
+                  // GRID MENU
+                  _buildServiceGrid(),
 
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 25.h),
 
-                  // *********** CATEGORIES ***********
+                  // CAROUSEL SECTION
+                  _buildCarousel(),
+
+                  SizedBox(height: 25.h),
+
+                  // RECENT ACTIVITY
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Categories",
+                          "Recent Activity",
                           style: TextStyle(
                             fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF1A1D2A),
+                            fontWeight: FontWeight.bold,
+                            color: kDarkText,
                           ),
                         ),
                         Text(
-                          "View all",
+                          "View All",
                           style: TextStyle(
-                            fontSize: 13.sp,
-                            color: const Color(0xFF1A73E8),
-                            fontWeight: FontWeight.w500,
+                            fontSize: 12.sp,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 10.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.2,
-                      children: [
-                        _categoryCard(
-                          icon: Icons.water_damage_outlined,
-                          title: "Water supply",
-                          subtitle: "Leaks, shortage",
-                        ),
-                        _categoryCard(
-                          icon: Icons.electric_bolt_rounded,
-                          title: "Electricity",
-                          subtitle: "Outage, faults",
-                        ),
-                        _categoryCard(
-                          icon: Icons.cleaning_services_outlined,
-                          title: "Sanitation",
-                          subtitle: "Garbage, cleaning",
-                        ),
-                        _categoryCard(
-                          icon: Icons.edit_road_rounded,
-                          title: "Road & traffic",
-                          subtitle: "Potholes, signals",
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 24.h),
-
-                  // *********** RECENT COMPLAINTS ***********
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Text(
-                      "Recent complaints",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1A1D2A),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 10.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Column(
-                      children: [
-                        _recentComplaintTile(
-                          id: "#SU-1023",
-                          title: "Street light not working",
-                          status: "In progress",
-                          statusColor: const Color(0xFFF79009),
-                          time: "2 hrs ago",
-                        ),
-                        _recentComplaintTile(
-                          id: "#SU-1018",
-                          title: "Water leakage near main road",
-                          status: "Resolved",
-                          statusColor: const Color(0xFF16A34A),
-                          time: "Yesterday",
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 15.h),
+                  _buildRecentActivityList(),
                 ],
               ),
             ),
+          ),
 
-            // *********** PRIMARY CTA BUTTON ***********
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                  vertical: 12.h,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 10,
-                      offset: const Offset(0, -4),
-                    ),
-                  ],
-                ),
-                child: SafeArea(
-                  top: false,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1A73E8),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 14.h,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.r),
-                        ),
-                        elevation: 0,
-                      ),
-                      onPressed: () {
-                        // TODO: Navigate to complaint creation screen
-                      },
-                      icon: Icon(
-                        Icons.add_circle_outline_rounded,
-                        color: Colors.white,
-                        size: 22.sp,
-                      ),
-                      label: Text(
-                        "Register new complaint",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+          // 4. Floating Action Button (Modern Style)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 30.h, left: 20.w, right: 20.w),
+              child: _buildFloatingBottomBar(),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // *********** GLASS BOX WIDGET ***********
-  Widget _glassBox({required Widget child}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.18),
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: child,
     );
   }
 
-  // *********** QUICK ACTION BUTTON ***********
-  Widget _actionButton({
-    required IconData icon,
-    required String text,
-    required Color color,
-  }) {
+  // ************** WIDGETS **************
+
+  Widget _buildHeader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.08),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, size: 24.sp, color: color),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: CircleAvatar(
+                    radius: 24.r,
+                    backgroundImage: const NetworkImage(
+                      "https://i.imgur.com/BoN9kdC.png",
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Good Morning,",
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    Text(
+                      "Divyanshu 👋",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+            )
+          ],
         ),
-        SizedBox(height: 6.h),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFF1A1D2A),
+        SizedBox(height: 25.h),
+        // Glassmorphism Search Bar
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                border: Border.all(color: Colors.white.withOpacity(0.2)),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.search, color: Colors.white70, size: 22.sp),
+                  SizedBox(width: 12.w),
+                  Text(
+                    "Search for complaints...",
+                    style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 
-  // *********** CATEGORY CARD ***********
-  Widget _categoryCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
+  Widget _buildQuickStats() {
     return Container(
-      margin: EdgeInsets.all(10.w),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18.r),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.18),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: kPrimaryColor.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1A73E8).withOpacity(0.06),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Icon(
-                icon,
-                size: 24.sp,
-                color: const Color(0xFF1A73E8),
-              ),
-            ),
-            SizedBox(height: 10.h),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF1A1D2A),
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: Colors.grey.shade600,
-              ),
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _statItem("24", "Pending", Colors.orange),
+          Container(width: 1, height: 40.h, color: Colors.grey.shade200),
+          _statItem("12", "Resolved", Colors.green),
+          Container(width: 1, height: 40.h, color: Colors.grey.shade200),
+          _statItem("05", "In Progress", Colors.blue),
+        ],
       ),
     );
   }
 
-  // *********** RECENT COMPLAINT TILE ***********
-  Widget _recentComplaintTile({
-    required String id,
-    required String title,
-    required String status,
-    required Color statusColor,
-    required String time,
-  }) {
+  Widget _statItem(String count, String label, Color color) {
+    return Column(
+      children: [
+        Text(
+          count,
+          style: TextStyle(
+            fontSize: 22.sp,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: Colors.grey.shade500,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildServiceGrid() {
+    return SizedBox(
+      height: 110.h,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        physics: const BouncingScrollPhysics(),
+        children: [
+          _serviceCard(Icons.water_drop_rounded, "Water", const Color(0xFF3B82F6)),
+          _serviceCard(Icons.bolt_rounded, "Electric", const Color(0xFFF59E0B)),
+          _serviceCard(Icons.delete_outline_rounded, "Waste", const Color(0xFF10B981)),
+          _serviceCard(Icons.add_road_rounded, "Roads", const Color(0xFF6366F1)),
+          _serviceCard(Icons.local_hospital_outlined, "Health", const Color(0xFFEF4444)),
+        ],
+      ),
+    );
+  }
+
+  Widget _serviceCard(IconData icon, String label, Color color) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10.h),
-      padding: EdgeInsets.all(12.w),
+      margin: EdgeInsets.only(right: 16.w),
+      width: 80.w,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14.r),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.12),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 24.sp),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              color: kDarkText,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCarousel() {
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 160.h,
+            autoPlay: true,
+            viewportFraction: 0.85,
+            enlargeCenterPage: true,
+            onPageChanged: (index, reason) {
+              setState(() => _currentIndex = index);
+            },
+          ),
+          items: _carouselImages.map((img) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(img, fit: BoxFit.cover),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.7),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 15.h,
+                    left: 15.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "New Update",
+                          style: TextStyle(
+                            color: kSecondaryColor,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "City clean drive\nstarts tomorrow!",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+        SizedBox(height: 10.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _carouselImages.asMap().entries.map((entry) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: _currentIndex == entry.key ? 20.w : 6.w,
+              height: 6.h,
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: _currentIndex == entry.key
+                    ? kPrimaryColor
+                    : Colors.grey.shade300,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRecentActivityList() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
+        children: [
+          _activityTile("#ID-2921", "Street Light Broken", "In Progress", Colors.orange),
+          _activityTile("#ID-2920", "Garbage Pickup Missed", "Resolved", Colors.green),
+          _activityTile("#ID-2919", "Water Pipe Leakage", "Pending", Colors.red),
+        ],
+      ),
+    );
+  }
+
+  Widget _activityTile(String id, String title, String status, Color statusColor) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.grey.shade100),
+      ),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(8.w),
+            padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A73E8).withOpacity(0.08),
-              shape: BoxShape.circle,
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(
-              Icons.report_gmailerrorred_rounded,
-              color: const Color(0xFF1A73E8),
-              size: 22.sp,
-            ),
+            child: Icon(Icons.description_outlined, color: kPrimaryColor, size: 20.sp),
           ),
-          SizedBox(width: 10.w),
+          SizedBox(width: 15.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  id,
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Text(
                   title,
                   style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1A1D2A),
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: kDarkText,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 4.h),
                 Text(
-                  time,
+                  id,
                   style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.grey.shade600,
+                    fontSize: 12.sp,
+                    color: Colors.grey.shade400,
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 4.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.08),
+              color: statusColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: Text(
               status,
               style: TextStyle(
                 fontSize: 11.sp,
-                fontWeight: FontWeight.w600,
                 color: statusColor,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
+          )
         ],
       ),
     );
   }
-}
 
+  Widget _buildFloatingBottomBar() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24.r),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          decoration: BoxDecoration(
+            color: kDarkText.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(24.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Need Help?",
+                    style: TextStyle(color: Colors.white54, fontSize: 11.sp),
+                  ),
+                  Text(
+                    "Register Complaint",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.all(10.w),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.add, color: Colors.white, size: 24.sp),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
