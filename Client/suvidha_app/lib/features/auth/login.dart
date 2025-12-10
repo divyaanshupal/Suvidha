@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:suvidha_app/features/HomeScreen/homeScreen.dart';
 import 'package:suvidha_app/services/registerUser.dart';
 import 'package:suvidha_app/features/auth/singnUp.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -194,32 +195,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       children: <Widget>[
         const SizedBox(height: 20),
         // Logo and App Name
+        // Logo and App Name
         Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFF1A73E8),
-                    const Color(0xFF4285F4),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF1A73E8).withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.support_agent,
-                color: Colors.white,
-                size: 40,
+            SizedBox(
+              width: 240,
+              height: 240,
+              child: Lottie.asset(
+                'assets/animations/girl.json',
+                repeat: true,          // loop animation
+                animate: true,         // play automatically
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(height: 24),
