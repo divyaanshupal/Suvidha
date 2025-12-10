@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suvidha_app/features/HomeScreen/homeScreen.dart';
 import 'package:suvidha_app/features/auth/login.dart';
 import 'package:suvidha_app/services/registerUser.dart';
@@ -82,6 +83,8 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
       if (!mounted) return;
 
       if (response.success) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authToken', response.token!);
         Navigator.push(context, MaterialPageRoute(builder: (_) => Homescreen()));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:suvidha_app/features/HomeScreen/homeScreen.dart';
 import 'package:suvidha_app/features/auth/login.dart';
 
 void main() {
@@ -29,9 +32,47 @@ class MyApp extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
           ),
-          home: const LoginScreen(),
+          home: const AuthGate(),
           debugShowCheckedModeBanner: false,
         );
+      },
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  Future<bool> _hasValidToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) return false;
+
+    if (JwtDecoder.isExpired(token)) {
+    await prefs.remove('authToken');
+    return false;
+  }
+
+    // Simple version: assume valid until backend says otherwise
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _hasValidToken(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          // Show splash / loading while checking
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.data == true) {
+          return const Homescreen();
+        } else {
+          return const LoginScreen();
+        }
       },
     );
   }
