@@ -39,6 +39,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   lottie: ^3.3.2
   shared_preferences: ^2.5.4
+  jwt_decoder: ^2.0.1
 
 
 dev_dependencies:
